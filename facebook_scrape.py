@@ -152,10 +152,10 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
                                 if 'paging' in subcomments:
                                     if 'next' in subcomments['paging']:
                                         subcomments = json.loads(
-                                                request_until_succeed(
-                                                    subcomments['paging']\
-                                                               ['next']),
-                                                return_none_if_400=True)
+                                                request_until_succeed(\
+                                                    subcomments\
+                                                        ['paging']['next'],
+                                                    return_none_if_400=True))
                                     else:
                                         has_next_subpage = False
                                 else:
@@ -170,9 +170,9 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
 
                     if 'paging' in comments:		
                         if 'next' in comments['paging']:
-                            comments = json.loads(request_until_succeed(
-                                        comments['paging']['next']),
-                                        return_none_if_400=True)
+                            comments = json.loads(request_until_succeed(\
+                                    comments['paging']['next'], 
+                                    return_none_if_400=True))
                         else:
                             has_next_page = False
                     else:
