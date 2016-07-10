@@ -2,7 +2,7 @@
 
 This is a fork of Max Woolf's [facebook-page-post-scraper](https://github.com/minimaxir/facebook-page-post-scraper).
 
-It works on Python 3, but a fully-functioning Python 2 version resides at commit 285260dc6752560c4d679ec27490cf63fdcf3dff.
+It works on Python 3, but a fully-functioning Python 2 version resides at commit 285260dc6752560c4d679ec27490cf63fdcf3dff .
 
 This version allows you to specify the page/group you wish to scrape and where you want CSV files to be stored through command-line arguments.
 
