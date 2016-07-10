@@ -36,23 +36,17 @@ app_id = "111111111111111"
 app_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
-### Scrape Posts form Public Page
-
-The Page data scraper is implemented as a Python 2.7 script in `get_fb_posts_fb_page.py`; fill in the App ID and App Secret of a Facebook app you control (I strongly recommend creating an app just for this purpose) and the Page ID of the Facebook Page you want to scrape at the beginning of the file. Then run the script. 
+You need an App ID and App Secret of a Facebook app you control (I strongly recommend creating an app just for this purpose) and the Page ID of the Facebook Page you want to scrape.
 
 Example CSVs for CNN, NYTimes, and BuzzFeed data are not included in this repository due to size, but you can download [CNN data here](https://dl.dropboxusercontent.com/u/2017402/cnn_facebook_statuses.csv.zip) [2.7MB ZIP], [NYTimes data here](https://dl.dropboxusercontent.com/u/2017402/nytimes_facebook_statuses.csv.zip) [4.9MB ZIP], and [BuzzFeed data here](https://dl.dropboxusercontent.com/u/2017402/buzzfeed_facebook_statuses.csv.zip) [2.1MB ZIP].
 
-### Scrape Posts from Open Group
+### Getting the numeric group ID
 
-To get data from an Open Group, use the `get_fb_posts_fb_group.py` script with the App ID and App Secret filled in the same way. However, the `group_id` is a *numeric ID*. For groups without a custom username, the ID will be in the address bar; for groups with custom usernames, to get the ID, do a View Source on the Group Page, search for "entity_id", and use the number to the right of that field. For example, the `group_id` of [Hackathon Hackers](https://www.facebook.com/groups/hackathonhackers/) is 759985267390294.
+For groups without a custom username, the ID will be in the address bar; for groups with custom usernames, to get the ID, do a View Source on the Group Page, search for "entity_id", and use the number to the right of that field. For example, the `group_id` of [Hackathon Hackers](https://www.facebook.com/groups/hackathonhackers/) is 759985267390294.
 
 ![](/examples/entity.png)
 
 You can download example data for [Hackathon Hackers here](https://dl.dropboxusercontent.com/u/2017402/759985267390294_facebook_statuses.csv.zip) [4.7MB ZIP]
-
-### Scrape Comments From Page/Group Posts
-
-To scrape all the user comments from the posts, create a CSV using either of the above scripts, then run the `get_fb_comments_from_fb.py` script, specifying the Page/Group as the `file_id`. The output includes the original `status_id` where the comment is located so you can map the comment to the original Post with a `JOIN` or `VLOOKUP`, and also a `parent_id` if the comment is a reply to another comment.
 
 Keep in mind that large pages such as CNN have *millions* of comments, so be careful! (scraping throughput is approximately 87k comments/hour)
 
@@ -64,16 +58,13 @@ Note that this script, and any variant of this script, *cannot* be used to scrap
 
 ## Maintainer
 
-* Max Woolf ([@minimaxir](http://minimaxir.com))
+* Koh Wei Jie
 
-For more information on how the script was originally created, and some tips on how to create similar scrapers yourself, see my blog post [How to Scrape Data From Facebook Page Posts for Statistical Analysis](http://minimaxir.com/2015/07/facebook-scraper/).
 
 ## Credits
 
-Peeter Tintis, whose [fork](https://github.com/Digitaalhumanitaaria/facebook-page-post-scraper/blob/master/get_fb_posts_fb_page.py) of this repo implements code for finding separate reaction counts per [this Stack Overflow answer](http://stackoverflow.com/a/37239851).
+This is a fork of Max Woolf's code at https://github.com/minimaxir/facebook-page-post-scraper
 
 ## License
 
 MIT
-
-If you do find this script useful, a link back to this repository would be appreciated. Thanks!
