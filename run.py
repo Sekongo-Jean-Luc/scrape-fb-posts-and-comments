@@ -80,14 +80,14 @@ if __name__ == "__main__":
                 app_secret = _get_v(line)
 
     if not (app_id and app_secret):
-        print "Error: incorrect configuration file format."
-        print
-        print "Please provide a configuration file in the correct format."
-        print "It should look something like this:"
-        print
-        print "app_id = \"111111111111111\""
-        print "app_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\""
-        print 
+        print("Error: incorrect configuration file format.")
+        print()
+        print("Please provide a configuration file in the correct format.")
+        print("It should look something like this:")
+        print()
+        print("app_id = \"111111111111111\"")
+        print("app_secret = \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"")
+        print() 
         sys.exit(0)
 
     if args.group: # if user wants to scrape a group

@@ -1,4 +1,4 @@
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import json
 import datetime
 import csv
@@ -6,25 +6,25 @@ import time
 
 
 def request_until_succeed(url, return_none_if_400=False):
-    req = urllib2.Request(url)
+    req = urllib.request.Request(url)
     success = False
     while success is False:
         try: 
-            response = urllib2.urlopen(req)
+            response = urllib.request.urlopen(req)
             if response.getcode() == 200:
                 success = True
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             time.sleep(5)
 
-            print "Error for URL %s: %s" % (url, datetime.datetime.now())
-            print "Retrying..."
+            print("Error for URL %s: %s" % (url, datetime.datetime.now()))
+            print("Retrying...")
 
             if return_none_if_400:
                 if '400' in str(e):
                     return None;
 
-    return response.read()
+    return response.read().decode()
 
 
 def unicode_normalize(text):
@@ -99,7 +99,7 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
 
     access_token = app_id + "|" + app_secret
 
-    with open(output_filename, 'wb') as file:
+    with open(output_filename, 'w') as file:
         w = csv.writer(file)
         if scrape_author_id:
             w.writerow(["comment_id", "status_id", "parent_id", "comment_message",
@@ -113,13 +113,11 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
         num_processed = 0   # keep a count on how many we've processed
         scrape_starttime = datetime.datetime.now()
 
-        print "Scraping %s Comments From Posts: %s\n" % \
-                (posts_input_file, scrape_starttime)
+        print("Scraping %s Comments From Posts: %s\n" % \
+                (posts_input_file, scrape_starttime))
 
-        with open(posts_input_file, 'rb') as csvfile:
+        with open(posts_input_file, 'r') as csvfile:
             reader = csv.DictReader(csvfile)
-
-            #reader = [dict(status_id='759985267390294_1158001970921953')]
 
             for status in reader:
                 has_next_page = True
@@ -147,9 +145,9 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
 
                                     num_processed += 1
                                     if num_processed % 1000 == 0:
-                                        print "%s Comments Processed: %s" % \
+                                        print("%s Comments Processed: %s" % \
                                                 (num_processed, 
-                                                    datetime.datetime.now())
+                                                    datetime.datetime.now()))
 
                                 if 'paging' in subcomments:
                                     if 'next' in subcomments['paging']:
@@ -167,8 +165,8 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
                         # stalling
                         num_processed += 1
                         if num_processed % 1000 == 0:
-                            print "%s Comments Processed: %s" % \
-                                    (num_processed, datetime.datetime.now())
+                            print("%s Comments Processed: %s" % \
+                                    (num_processed, datetime.datetime.now()))
 
                     if 'paging' in comments:		
                         if 'next' in comments['paging']:
@@ -181,8 +179,8 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
                         has_next_page = False
 
 
-        print "\nDone!\n%s Comments Processed in %s" % \
-                (num_processed, datetime.datetime.now() - scrape_starttime)
+        print("\nDone!\n%s Comments Processed in %s" % \
+                (num_processed, datetime.datetime.now() - scrape_starttime))
 
 
 def get_status_reactions(status_id, access_token):
@@ -215,12 +213,12 @@ def process_post(status, type_pg, access_token):
     # so must check for existence first
 
     status_id = status['id']
-    status_message = '' if 'message' not in status.keys() else \
+    status_message = '' if 'message' not in list(status.keys()) else \
             unicode_normalize(status['message'])
-    link_name = '' if 'name' not in status.keys() else \
+    link_name = '' if 'name' not in list(status.keys()) else \
             unicode_normalize(status['name'])
     status_type = status['type']
-    status_link = '' if 'link' not in status.keys() else \
+    status_link = '' if 'link' not in list(status.keys()) else \
             unicode_normalize(status['link'])
 
     status_author = None
@@ -329,7 +327,7 @@ def scrape_posts(page_or_group_id, type_pg, app_id, app_secret, output_filename)
 
     access_token = app_id + "|" + app_secret
 
-    with open(output_filename, 'wb') as file:
+    with open(output_filename, 'w') as file:
         w = csv.writer(file)
         if type_pg == "page":
             w.writerow(["status_id", "status_message", 
@@ -349,7 +347,7 @@ def scrape_posts(page_or_group_id, type_pg, app_id, app_secret, output_filename)
         num_processed = 0   # keep a count on how many we've processed
         scrape_starttime = datetime.datetime.now()
         
-        print "Scraping %s Facebook %s: %s\n" % (page_or_group_id, type_pg, scrape_starttime)
+        print("Scraping %s Facebook %s: %s\n" % (page_or_group_id, type_pg, scrape_starttime))
 
         statuses = get_feed_data(page_or_group_id, type_pg, access_token, 100)
 
@@ -364,16 +362,16 @@ def scrape_posts(page_or_group_id, type_pg, app_id, app_secret, output_filename)
                 # stalling
                 num_processed += 1
                 if num_processed % 100 == 0:
-                    print "%s Statuses Processed: %s" % \
-                        (num_processed, datetime.datetime.now())
+                    print("%s Statuses Processed: %s" % \
+                        (num_processed, datetime.datetime.now()))
 
             # if there is no next page, we're done.
-            if 'paging' in statuses.keys():
+            if 'paging' in list(statuses.keys()):
                 statuses = json.loads(request_until_succeed(
                                         statuses['paging']['next']))
             else:
                 has_next_page = False
 
 
-        print "\nDone!\n%s Statuses Processed in %s" % \
-                (num_processed, datetime.datetime.now() - scrape_starttime)
+        print("\nDone!\n%s Statuses Processed in %s" % \
+                (num_processed, datetime.datetime.now() - scrape_starttime))
