@@ -31,6 +31,14 @@ python3 run.py --page <page name> --cred <path to credential file> --posts-outpu
 
 To scrape from a group, change `--page` to `--group`.
 
+To skip downloading statuses and retrieve comments using an existing CSV file, use the `--use-existing-posts-csv` command:
+
+```
+python3 run.py --page <page name> --cred <path to credential file> --posts-output <filepath> \
+--scrape-comments --comments-output <filepath> --use-existing-posts-csv
+```
+
+
 ### Credential file format
 
 The `-cred` command-line argument specifies where your credential file is located.

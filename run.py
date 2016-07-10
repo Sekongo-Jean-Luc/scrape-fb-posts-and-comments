@@ -60,6 +60,10 @@ if __name__ == "__main__":
     parser.add_argument("--scrape-author-id", action="store_true", 
             required=False, help="Scrape comment authors' Facebook IDs")
 
+    parser.add_argument("--use-existing-posts-csv", action="store_true", 
+            required=False, help="Scrape comments from an existing " + \
+            "status/post CSV. Specify it using the --posts-output argument.")
+
     args = parser.parse_args()
 
     if args.scrape_comments and args.comments_output is None:
@@ -91,13 +95,15 @@ if __name__ == "__main__":
         sys.exit(0)
 
     if args.group: # if user wants to scrape a group
-        scrape_group_posts(args.group, app_id, app_secret, args.posts_output)
+        if not args.use_existing_posts_csv:
+            scrape_group_posts(args.group, app_id, app_secret, args.posts_output)
         if args.scrape_comments: # if user wants to scrape comments too
             scrape_comments(args.group, app_id, app_secret, args.posts_output,
                     args.comments_output, args.scrape_author_id)
 
     elif args.page: # if user wants to scrape a page
-        scrape_page_posts(args.page, app_id, app_secret, args.posts_output)
+        if not args.use_existing_posts_csv:
+            scrape_page_posts(args.page, app_id, app_secret, args.posts_output)
         if args.scrape_comments: # if user wants to scrape comments too
             scrape_comments(args.page, app_id, app_secret, args.posts_output, 
                     args.comments_output, args.scrape_author_id)
