@@ -2,6 +2,8 @@
 
 This is a fork of Max Woolf's [facebook-page-post-scraper](https://github.com/minimaxir/facebook-page-post-scraper).
 
+It works on Python 3, but a fully-functioning Python 2 version resides at commit 285260dc6752560c4d679ec27490cf63fdcf3dff.
+
 This version allows you to specify the page/group you wish to scrape and where you want CSV files to be stored through command-line arguments.
 
 It also separates your App ID and App secret from the code; now, you have to store these credentials in a separate file.
@@ -18,12 +20,12 @@ The purpose of the script is to gather Facebook data for semantic analysis, whic
 
 To scrape posts from a page:
 
-`python run.py --page <page name> --cred <path to credential file> --posts-output <filepath>`
+`python3 run.py --page <page name> --cred <path to credential file> --posts-output <filepath>`
 
 To scrape both posts and comments:
 
 ```
-python run.py --page <page name> --cred <path to credential file> --posts-output <filepath> \
+python3 run.py --page <page name> --cred <path to credential file> --posts-output <filepath> \
 --scrape-comments --comments-output <filepath>
 ```
 
