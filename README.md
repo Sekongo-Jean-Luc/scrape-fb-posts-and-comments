@@ -10,6 +10,32 @@ The purpose of the script is to gather Facebook data for semantic analysis, whic
 
 ## Usage
 
+To scrape posts from a page:
+
+`python run.py --page <page name> --cred <path to credential file> --posts-output <filepath>`
+
+To scrape both posts and comments:
+
+```
+python run.py --page <page name> --cred <path to credential file> --posts-output <filepath> \
+--scrape-comments --comments-output <filepath>
+```
+
+To scrape from a group, change `--page` to `--group`.
+
+### Credential file format
+
+The `-c` command-line argument specifies where your credential file is located.
+
+**Do not share this file with anyone.**
+
+It should look something like this:
+
+```
+app_id = "111111111111111"
+app_secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
 ### Scrape Posts form Public Page
 
 The Page data scraper is implemented as a Python 2.7 script in `get_fb_posts_fb_page.py`; fill in the App ID and App Secret of a Facebook app you control (I strongly recommend creating an app just for this purpose) and the Page ID of the Facebook Page you want to scrape at the beginning of the file. Then run the script. 
