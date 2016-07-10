@@ -1,5 +1,11 @@
 # Facebook Page Post Scraper
 
+This is a fork of Max Woolf's [facebook-page-post-scraper](https://github.com/minimaxir/facebook-page-post-scraper).
+
+This version allows you to specify the page/group you wish to scrape and where you want CSV files to be stored through command-line arguments.
+
+It also separates your App ID and App secret from the code; now, you have to store these credentials in a separate file.
+
 ![](/examples/fb_scraper_data.png)
 
 A tool for gathering *all* the posts and comments of a Facebook Page (or Open Facebook Group) and related metadata, including post message, post links, and counts of each reaction on the post. All this data is exported as a CSV, able to be imported into any data analysis program like Excel.
@@ -60,11 +66,12 @@ Note that this script, and any variant of this script, *cannot* be used to scrap
 
 * Koh Wei Jie
 
-
 ## Credits
 
 This is a fork of Max Woolf's code at https://github.com/minimaxir/facebook-page-post-scraper
 
+Parts of this README were copied verbatim.
+
 ## License
 
-MIT
+Be aware that this is a fork of Max Woolf's MIT-licensed code.
