@@ -49,7 +49,7 @@ def get_comment_feed_data(status_id, access_token, num_comments):
     else:   
         return json.loads(data)
 
-def process_comment(comment, status_id, parent_id = ''):
+def process_comment(comment, status_id, scrape_author_id, parent_id = ''):
     # The status is now a Python dictionary, so for top-level items,
     # we can simply call the key.
 
@@ -60,6 +60,11 @@ def process_comment(comment, status_id, parent_id = ''):
     comment_message = '' if 'message' not in comment else \
             unicode_normalize(comment['message'])
     comment_author = unicode_normalize(comment['from']['name'])
+
+    comment_author_id = "None"
+    if "id" in comment["from"]:
+        comment_author_id = unicode_normalize(comment['from']['id'])
+
     comment_likes = 0 if 'like_count' not in comment else \
             comment['like_count']
 
@@ -80,18 +85,30 @@ def process_comment(comment, status_id, parent_id = ''):
 
     # Return a tuple of all processed data
 
-    return (comment_id, status_id, parent_id, comment_message, comment_author,
-            comment_published, comment_likes)
+    if scrape_author_id:
+        return (comment_id, status_id, parent_id, comment_message, 
+                comment_author, comment_author_id, 
+                comment_published, comment_likes)
+    else:
+        return (comment_id, status_id, parent_id, comment_message, 
+                comment_author, 
+                comment_published, comment_likes)
 
 def scrape_comments(page_or_group_id, app_id, app_secret, 
-        posts_input_file, output_filename):
+        posts_input_file, output_filename, scrape_author_id):
 
     access_token = app_id + "|" + app_secret
 
     with open(output_filename, 'wb') as file:
         w = csv.writer(file)
-        w.writerow(["comment_id", "status_id", "parent_id", "comment_message",
-            "comment_author", "comment_published", "comment_likes"])
+        if scrape_author_id:
+            w.writerow(["comment_id", "status_id", "parent_id", "comment_message",
+                "comment_author", "comment_author_id", 
+                "comment_published", "comment_likes"])
+        else:
+            w.writerow(["comment_id", "status_id", "parent_id", "comment_message",
+                "comment_author", 
+                "comment_published", "comment_likes"])
 
         num_processed = 0   # keep a count on how many we've processed
         scrape_starttime = datetime.datetime.now()
@@ -113,7 +130,7 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
                 while has_next_page and comments is not None:				
                     for comment in comments['data']:
                         w.writerow(process_comment(comment, 
-                            status['status_id']))
+                            status['status_id'], scrape_author_id))
 
                         if 'comments' in comment:
                             has_next_subpage = True
@@ -123,12 +140,9 @@ def scrape_comments(page_or_group_id, app_id, app_secret,
 
                             while has_next_subpage:
                                 for subcomment in subcomments['data']:
-                                    # print (process_comment(
-                                        # subcomment, status['status_id'], 
-                                        # comment['id']))
-                                    w.writerow(process_comment(
-                                            subcomment, 
+                                    w.writerow(process_comment( subcomment, 
                                             status['status_id'], 
+                                            scrape_author_id,
                                             comment['id']))
 
                                     num_processed += 1

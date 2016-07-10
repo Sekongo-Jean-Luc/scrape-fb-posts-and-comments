@@ -17,9 +17,11 @@ def scrape_page_posts(page_id, app_id, app_secret, output_filename):
                                  output_filename)
 
 
-def scrape_comments(page_id, app_id, app_secret, input_filename, output_filename):
+def scrape_comments(page_id, app_id, app_secret, input_filename, 
+                    output_filename, scrape_author_id):
     facebook_scrape.scrape_comments(page_id, app_id, app_secret, 
-        input_filename, output_filename)
+                                    input_filename, output_filename, 
+                                    scrape_author_id)
 
 
 if __name__ == "__main__":
@@ -39,19 +41,24 @@ if __name__ == "__main__":
     parser.add_argument("--cred", metavar="Credential file", type=str, 
             required=True,
             help="Path to a secret credentials file containing your app " + \
-                    "ID and app secret. See README.md for the credential file format.")
+                "ID and app secret. See README.md for the " + \
+                "credential file format.")
 
     parser.add_argument("--posts-output", metavar="Output CSV file for posts", 
             type=str, required=True, 
             help="Path to where you want the output CSV file to be")
 
-    parser.add_argument("--scrape-comments", action="store_true", required=False,
-            help="Scrape comments as well as posts.")
+    parser.add_argument("--scrape-comments", action="store_true", 
+            required=False, help="Scrape comments as well as posts.")
 
-    parser.add_argument("--comments-output", metavar="Output CSV file for comments", 
+    parser.add_argument("--comments-output", metavar="Output CSV file for " + \
+            "comments",
             type=str, required=False,
             help="Path to where you want the output CSV file for comments " + \
                     "to be")
+
+    parser.add_argument("--scrape-author-id", action="store_true", 
+            required=False, help="Scrape comment authors' Facebook IDs")
 
     args = parser.parse_args()
 
@@ -86,9 +93,11 @@ if __name__ == "__main__":
     if args.group: # if user wants to scrape a group
         scrape_group_posts(args.group, app_id, app_secret, args.posts_output)
         if args.scrape_comments: # if user wants to scrape comments too
-            scrape_comments(args.group, app_id, app_secret, args.posts_output, args.comments_output)
+            scrape_comments(args.group, app_id, app_secret, args.posts_output,
+                    args.comments_output, args.scrape_author_id)
 
     elif args.page: # if user wants to scrape a page
         scrape_page_posts(args.page, app_id, app_secret, args.posts_output)
         if args.scrape_comments: # if user wants to scrape comments too
-            scrape_comments(args.page, app_id, app_secret, args.posts_output, args.comments_output)
+            scrape_comments(args.page, app_id, app_secret, args.posts_output, 
+                    args.comments_output, args.scrape_author_id)
