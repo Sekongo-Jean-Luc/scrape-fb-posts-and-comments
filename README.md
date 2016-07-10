@@ -31,7 +31,7 @@ To scrape from a group, change `--page` to `--group`.
 
 ### Credential file format
 
-The `-c` command-line argument specifies where your credential file is located.
+The `-cred` command-line argument specifies where your credential file is located.
 
 **Do not share this file with anyone.**
 
