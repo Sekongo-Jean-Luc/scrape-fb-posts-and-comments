@@ -367,8 +367,11 @@ def scrape_posts(page_or_group_id, type_pg, app_id, app_secret, output_filename)
 
             # if there is no next page, we're done.
             if 'paging' in list(statuses.keys()):
-                statuses = json.loads(request_until_succeed(
-                                        statuses['paging']['next']))
+                
+                if not 'next' in statuses['paging']:
+                    has_next_page = False
+                else:
+                    statuses = json.loads(request_until_succeed(statuses['paging']['next']))
             else:
                 has_next_page = False
 
